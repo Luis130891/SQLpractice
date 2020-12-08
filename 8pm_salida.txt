@@ -1,0 +1,215 @@
+
+============================================================================================
+Su nombre completo (8pm)
+============================================================================================
+..............
+Se conecta como system, dropea usuario exa3, lo vuelve a crear (permisos de dba) y se conecta con exa3
+crea la tabla, PK y secuencia... todo listo para que programen lo que se solicita!
+(2 puntos menos si no coloca su nombre completo (horario ya apacere), al inicio y al final del script) (Maximo a rebajar 4ptos)
+Solo 4 objetos por crear (Procedimiento, Trigger, Vista y Funcion) Uno de cada uno!
+NO DEBE CREAR FUNCIONES ADICIONALES la validacion del procedimiento y/o trigger debe hacerla alli mismo!
+puede usar todas las herramientas vistas en las clases (funciones estandar, excepciones, cursores, AR, select into.. etc)
+..............
+OJO QUE NO MODIFIQUEN NADA de las pruebas ni datos que se insertan!!... se actualizan!! o se borran!! (puntos menos!)
+NO MODIFICAR NADA DE LOS NOMBRES DE : tabla, procedimiento, funcion, vista, trigger. (Dejar esos nombres!)
+Solo construir el codigo solicitado que complete las acciones, y ver los ejemplos y soluciones, todo claro!!
+..............ENTREGABLE!
+Nombre del archivo ex3_nombre_apellido.sql (todo minuscula sin tildes ni caracteres especiales)
+1 hora 20 minutos de programacion (como toman unos 20 minutos para ver los videos se les da 1h 40 minutos en total!)
+cada minuto adicional de atraso, se rebaja 1 punto.
+Estudiantes que tengan adecuacion tienen 1h mas.
+HACER EL EXAMEN INDIVIDUAL, SIN CONSULTAR INTERNET NI OTROS ESTUDIANTES,
+Claro, si pueden usar todos los scripts de ejemplo y tareas morales!
+Apelo a la honestidad y honorabilidad de cada estudiante!! OK! de acuerdo!!!
+Inicio Base .............
+Connected.
+
+User dropped.
+
+
+User created.
+
+
+Grant succeeded.
+
+Connected.
+Creacion de Tabla de Choferes
+
+Table created.
+
+Crear PK de Tabla de Choferes
+
+Table altered.
+
+Crear Secuencia de Tabla de Choferes
+
+Sequence created.
+
+***NUEVO. Define el formato de la fecha detallado (solo para diferenciar) ** NO CAMBIAR!
+
+Session altered.
+
+Fin base .............
+..............
+============================================================================================
+1) 8pm (30ptos) Crear procedimiento (prc_ins_chofer) que inserte en tabla choferes. Si el nombre ya existe genere
+un mensaje de error (y no debe insertar) no se permite si esta registrado JUAN, y mete Juan (cuenta como repetido!)
+no es error de validacion de PK, es una validacion propia antes de insertar en el procedimiento!
+Recordar que el ID se genera por secuencia (no se pasa por parametro) y el ID es PK.
+
+Procedure created.
+
+No errors.
+NO DEBE CREAR FUNCIONES ADICIONALES la validacion del procedimiento debe hacerla alli mismo!
+============================================================================================
+2) 8pm (30ptos) Crear trigger que no permita aumentar el salario si la persona ingreso a trabajar en el anio 2020
+(desde 01-enero-2020 hasta la fecha) solo se permite si es del anio 2019 para atras (31-dic-2019 habia atras...)
+Puede validar QUEMADO anio 2020, o bien obtener anio actual con sysdate (para este ejemplo cualquiera de las dos opciones)
+si cambia nombre o rebaja salario no hay problema, se puede hacer. Es solo bloquear el AUMENTO de SALARIO
+NO USAR TABLA DE PARAMETROS.
+
+Trigger created.
+
+No errors.
+============================================================================================
+3) 8pm (15ptos) Crear vista que muestre la informacion como se mira en la prueba del select de la vista
+que es: ID + Fecha Ingreso + Nombre + Salario (Exacto con los parentesis y guiones que aparecen)
+tambien el orden exacto como aparece!
+
+View created.
+
+============================================================================================
+4) 8pm (25ptos) Crear funcion que cuente los choferes que tengan el PNombre o el PSalario indicado (cualquiera de los dos)
+Entonces cuenta los que cumplan uno (nombre exacto) o bien el otro criterio (salario) VER LOS EJEMPLOS ABAJO!
+
+Function created.
+
+============================================================================================
+============================================================================================
+PRUEBAS, Verifican la correcta programacion de los requerimientos solicitados
+Los resultados deben dar exactos, estan colocados en un orden para afectar lo menos en caso
+que no resuelvan algun ejercicio.
+Deben respetar el orden y valores de las pruebas NO CAMBIAR NADA!!
+si programan todo ok, debe dar los mismos resultados
+============================================================================================
+============================================================================================
+Ejecuta el llamado al procedimiento 4 veces, uno con error, quedan 3 choferes ID: 10,11,12.
+..............
+Juan #10 (correcto se inserta)
+
+PL/SQL procedure successfully completed.
+
+..............
+OJO: Si no logra hacer la validacion comente esta linea para que tenga los 3 registros para el resto de pruebas
+(Error esperado #1) (no se gasta secuencia) porque procedimiento valida antes de insertar!
+BEGIN prc_ins_chofer('JUAN',to_date('30-12-2019','dd-mm-yyyy'),1300); END;
+
+*
+ERROR at line 1:
+ORA-20001: Nombre de Chofer repetido, no se puede insertar
+ORA-06512: at "EXA3.PRC_INS_CHOFER", line 9
+ORA-06512: at line 1
+
+
+..............
+Ana #11 (correcto se inserta)
+
+PL/SQL procedure successfully completed.
+
+..............
+Vera #12 (correcto se inserta)
+
+PL/SQL procedure successfully completed.
+
+..............
+Tres Choferes
+
+        ID NOMBRE     FEC_INGRESO         SALARIO
+---------- ---------- ---------------- ----------
+        10 Juan       28-12-2019 00:00       1400
+        11 Ana        20-06-2020 00:00       1400
+        12 Vera       21-06-2020 00:00       1040
+
+como ven no se salta el SECUENCE, quedan ID 10,11 y 12
+============================================================================================
+Consultar la Vista
+
+DATO
+--------------------------------------------------------------------------------
+10(28-12-2019)-Juan-1400
+11(20-06-2020)-Ana-1400
+12(21-06-2020)-Vera-1040
+
+============================================================================================
+Probar la funcion con Vera o 1040 (solo hay uno) pues es la misma condicion para ambos
+..............
+
+  CANTIDAD
+----------
+         1
+
+..............
+Probar la funcion con Ana o 1040 (son dos registros)
+
+  CANTIDAD
+----------
+         2
+
+..............
+Probar la funcion con Vera o 1400 (son tres registros)
+
+  CANTIDAD
+----------
+         3
+
+============================================================================================
+Probar los UPDATE y el TRIGGER
+ID #10 Si permite (anio 2019) Juan actualizar salario a 1450
+
+1 row updated.
+
+
+Commit complete.
+
+..............
+(Error esperado #2)  No permite aumentar salario a 1600 por trigger del (anio 2020) Ana #11
+update choferes set salario = 1600 where id = 11
+       *
+ERROR at line 1:
+ORA-20001: No se puede aumentar
+ORA-06512: at "EXA3.CHOFER_TRG_BUR", line 5
+ORA-04088: error during execution of trigger 'EXA3.CHOFER_TRG_BUR'
+
+
+
+Commit complete.
+
+..............
+ID #11 Ana Si permite cambiar nombre de Ana a Anita (pues no aumenta el salario)
+
+1 row updated.
+
+
+Commit complete.
+
+..............
+Tambien a ID #11 permite rebajar el salario de 1400 a 1300 (a Anita)
+
+1 row updated.
+
+
+Commit complete.
+
+..............
+Registros Finales
+
+        ID NOMBRE     FEC_INGRESO         SALARIO
+---------- ---------- ---------------- ----------
+        10 Juan       28-12-2019 00:00       1450
+        11 Anita      20-06-2020 00:00       1300
+        12 Vera       21-06-2020 00:00       1040
+
+============================================================================================
+Su nombre completo (8pm)
+============================================================================================
+SQL>
